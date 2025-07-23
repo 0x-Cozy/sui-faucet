@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import $ from 'jquery';
 import 'jquery.ripples';
-import { FaGithub, FaDiscord, FaTwitter, FaCloud, FaTint } from 'react-icons/fa';
+import { FaGithub, FaDiscord, FaTwitter, FaCloud, FaTint, FaBolt } from 'react-icons/fa';
 import "./App.css";
 
 declare global {
@@ -112,8 +112,8 @@ const ThunderEffect = ({ show }: { show: boolean }) => {
 export default function App() {
   const [showSocials, setShowSocials] = useState(false);
   const [rippleKey, setRippleKey] = useState(0);
-  const [sliderValue, setSliderValue] = useState(50);
-  const [activeTab, setActiveTab] = useState('sui'); // 'sui', 'nft', 'refund'
+  const [sliderValue, setSliderValue] = useState(40);
+  const [activeTab, setActiveTab] = useState('sui'); // tabs sui, nft nd refund
   const [walletAddress, setWalletAddress] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [captchaCompleted, setCaptchaCompleted] = useState(false);
@@ -123,16 +123,24 @@ export default function App() {
   const sliderRef = useRef<HTMLDivElement>(null);
   const cloudRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleMouseDown = (e: React.MouseEvent | React.TouchEvent) => {
     setIsDragging(true);
     handleMouseMove(e);
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const handleMouseMove = (e: React.MouseEvent | React.TouchEvent) => {
     if (!sliderRef.current) return;
     
     const rect = sliderRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
+    let clientX: number;
+    
+    if ('touches' in e) {
+      clientX = e.touches[0].clientX;
+    } else {
+      clientX = e.clientX;
+    }
+    
+    const x = clientX - rect.left;
     const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
     const newValue = Math.round(percentage);
     setSliderValue(newValue);
@@ -148,17 +156,31 @@ export default function App() {
 
   useEffect(() => {
     if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove as any);
-      document.addEventListener('mouseup', handleMouseUp);
+      const handleMouseMoveGlobal = (e: MouseEvent | TouchEvent) => {
+        handleMouseMove(e as any);
+      };
+      
+      const handleMouseUpGlobal = () => {
+        handleMouseUp();
+      };
+
+      document.addEventListener('mousemove', handleMouseMoveGlobal);
+      document.addEventListener('mouseup', handleMouseUpGlobal);
+      document.addEventListener('touchmove', handleMouseMoveGlobal, { passive: false });
+      document.addEventListener('touchend', handleMouseUpGlobal);
+      
       return () => {
-        document.removeEventListener('mousemove', handleMouseMove as any);
-        document.removeEventListener('mouseup', handleMouseUp);
+        document.removeEventListener('mousemove', handleMouseMoveGlobal);
+        document.removeEventListener('mouseup', handleMouseUpGlobal);
+        document.removeEventListener('touchmove', handleMouseMoveGlobal);
+        document.removeEventListener('touchend', handleMouseUpGlobal);
       };
     }
   }, [isDragging]);
 
-  const dropCount = Math.max(1, Math.floor((sliderValue / 100) * 5));
+  const dropCount = sliderValue < 20 ? 1 : sliderValue < 50 ? 2 : sliderValue < 80 ? 3 : 0;
   const suiAmount = (sliderValue / 100) * 0.9 + 0.1;
+  const isMaxStorm = sliderValue >= 80;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -242,18 +264,16 @@ export default function App() {
         return (
           <div className="flex flex-col space-y-4 items-center w-80 sm:w-96">
             <div className="w-full mb-6">
-              <div className="relative">
-                <input
-                  type="text"
-                  value={walletAddress}
-                  onChange={(e) => setWalletAddress(e.target.value)}
-                  className="w-full px-4 py-3 bg-[#030F1C] border-2 border-[#4DA2FF] rounded-lg text-[#e6f7fd] text-sm font-['Space_Mono'] focus:outline-none focus:border-[#6fbcf0] focus:shadow-[0_0_10px_rgba(111,188,240,0.3)] transition-all duration-300 placeholder-transparent"
-                  placeholder="Enter wallet address"
-                />
-                <label className="absolute left-4 -bottom-6 text-xs font-['Space_Mono'] text-[#4DA2FF] opacity-80 transition-all duration-300">
-                  WALLET ADDRESS
-                </label>
-              </div>
+              <label className="block text-xs text-[#4DA2FF] opacity-80 mb-2">
+                WALLET ADDRESS
+              </label>
+              <input
+                type="text"
+                value={walletAddress}
+                onChange={(e) => setWalletAddress(e.target.value)}
+                className="w-full px-4 py-3 bg-[#030F1C] border-2 border-[#4DA2FF] rounded-sm text-white text-sm focus:outline-none focus:border-[#6fbcf0] focus:shadow-[0_0_10px_rgba(111,188,240,0.3)] transition-all duration-300"
+                placeholder="Enter wallet address"
+              />
             </div>
             
             <div className="relative w-full h-10 sm:h-12 mb-2">
@@ -262,38 +282,44 @@ export default function App() {
                 className="absolute top-0 transition-all duration-300 ease-out flex flex-col items-center cursor-grab active:cursor-grabbing"
                 style={{ left: `${sliderValue}%`, transform: 'translateX(-50%)' }}
                 onMouseDown={handleMouseDown}
+                onTouchStart={handleMouseDown}
               >
                 <FaCloud className="text-[#4DA2FF] text-xl sm:text-2xl mb-1" />
                 <div className="flex justify-center gap-0.5">
-                  {Array.from({ length: dropCount }, (_, i) => (
-                    <FaTint 
-                      key={i} 
-                      className="text-[#4DA2FF] text-xs animate-bounce" 
-                      style={{ animationDelay: `${i * 0.1}s` }}
-                    />
-                  ))}
+                  {isMaxStorm ? (
+                    <FaBolt className="text-[#FFD700] text-xs animate-pulse" />
+                  ) : (
+                    Array.from({ length: dropCount }, (_, i) => (
+                      <FaTint 
+                        key={i} 
+                        className="text-[#4DA2FF] text-xs animate-bounce" 
+                        style={{ animationDelay: `${i * 0.1}s` }}
+                      />
+                    ))
+                  )}
                 </div>
               </div>
             </div>
             
             <div 
               ref={sliderRef}
-              className="relative w-full h-2 bg-[#011829] rounded-full cursor-pointer border border-[#2e3b4e]"
+              className="relative w-full h-2 bg-[#011829] rounded-full cursor-pointer border border-[#2e3b4e] touch-none"
               onMouseDown={handleMouseDown}
+              onTouchStart={handleMouseDown}
             >
               <div 
                 className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#4DA2FF] to-[#4DA2FF] rounded-full transition-all duration-300"
                 style={{ width: `${sliderValue}%` }}
               ></div>
               <div 
-                className="absolute top-1/2 w-4 h-4 bg-[#4DA2FF] rounded-full border border-[#e6f7fd] transform -translate-y-1/2 transition-all duration-300"
+                className="absolute top-1/2 w-4 h-4 bg-[#4DA2FF] rounded-full border border-white transform -translate-y-1/2 transition-all duration-300"
                 style={{ left: `${sliderValue}%`, transform: 'translate(-50%, -50%)' }}
               ></div>
             </div>
             
             <div className="mt-2 text-center">
               <div className="text-lg sm:text-xl font-bold text-[#4DA2FF]">{suiAmount.toFixed(1)} SUI</div>
-              <div className="text-xs font-['Space_Mono'] text-[#e6f7fd] opacity-70">
+              <div className="text-xs text-white opacity-70">
                 {sliderValue < 20 ? 'Airdrop' : sliderValue < 50 ? 'Water Drop' : sliderValue < 80 ? 'Rain Drop' : 'Full Storm'}
               </div>
             </div>
@@ -301,10 +327,10 @@ export default function App() {
             <div className="w-full flex justify-center">
               <button 
                 onClick={handleCaptchaClick}
-                className={`w-32 h-12 rounded-lg flex items-center justify-center transition-all duration-300 font-['Space_Mono'] text-xs cursor-pointer ${
+                className={`w-32 h-12 mt-4 rounded-lg flex font-['Space_Mono'] items-center justify-center transition-all duration-300 text-xs cursor-pointer ${
                   captchaCompleted 
                     ? 'bg-[#4DA2FF] text-[#030F1C] border-2 border-[#4DA2FF] shadow-[0_0_10px_rgba(77,162,255,0.4)] hover:bg-[#030F1C] hover:text-[#4DA2FF] hover:scale-105' 
-                    : 'bg-[#011829] text-[#e6f7fd] border-2 border-[#2e3b4e] opacity-50 hover:opacity-80'
+                    : 'bg-[#011829] text-white border-2 border-[#2e3b4e] opacity-50 hover:opacity-80'
                 }`}
               >
                 {captchaCompleted ? 'REQUEST SUI DROP' : 'CAPTCHA'}
@@ -317,21 +343,21 @@ export default function App() {
         return (
           <div className="flex flex-col space-y-6 items-center w-80 sm:w-96">
             <div className="w-48 h-48 bg-[#011829] border-2 border-[#4DA2FF] rounded-lg flex items-center justify-center">
-              <span className="text-xs font-['Space_Mono'] text-[#e6f7fd] opacity-50">NFT IMAGE</span>
+              <span className="text-xs text-white opacity-50">NFT IMAGE</span>
             </div>
             
             <div className="text-center">
-              <h3 className="text-lg font-bold text-[#4DA2FF] font-['Space_Mono']">FIRST MOVERS NFT</h3>
-              <p className="text-xs text-[#e6f7fd] opacity-70 mt-1">Exclusive collection</p>
+              <h3 className="text-lg font-bold text-[#4DA2FF]">FIRST MOVERS NFT</h3>
+              <p className="text-xs text-white opacity-70 mt-1">Exclusive collection</p>
             </div>
             
             <div className="w-full flex justify-center">
               <button 
                 onClick={handleCaptchaClick}
-                className={`w-32 h-12 rounded-lg flex items-center justify-center transition-all duration-300 font-['Space_Mono'] text-xs cursor-pointer ${
+                className={`w-32 h-12 mt-4 rounded-lg flex items-center justify-center transition-all duration-300 font-['Space_Mono'] text-xs cursor-pointer ${
                   captchaCompleted 
                     ? 'bg-[#4DA2FF] text-[#030F1C] border-2 border-[#4DA2FF] shadow-[0_0_10px_rgba(77,162,255,0.4)] hover:bg-[#030F1C] hover:text-[#4DA2FF] hover:scale-105' 
-                    : 'bg-[#011829] text-[#e6f7fd] border-2 border-[#2e3b4e] opacity-50 hover:opacity-80'
+                    : 'bg-[#011829] text-white border-2 border-[#2e3b4e] opacity-50 hover:opacity-80'
                 }`}
               >
                 {captchaCompleted ? 'REQUEST NFT DROP' : 'CAPTCHA'}
@@ -343,17 +369,17 @@ export default function App() {
       case 'refund':
         return (
           <div className="flex flex-col space-y-6 items-center text-center w-80 sm:w-96">
-            <div className="text-lg font-bold text-[#4DA2FF] font-['Space_Mono']">
+            <div className="text-lg font-bold text-[#4DA2FF]">
               Unused Testnet SUI?
             </div>
-            <div className="text-sm text-[#e6f7fd] opacity-80 font-['Space_Mono']">
+            <div className="text-sm text-white opacity-80">
               Return your unused tokens to help other developers!
             </div>
-            <div className="text-xs text-[#e6f7fd] opacity-60 font-['Space_Mono']">
+            <div className="text-xs text-white opacity-60">
               Return tokens to address:
             </div>
             <div className="w-full px-4 py-3 bg-[#011829] border-2 border-[#2e3b4e] rounded-lg">
-              <div className="text-xs font-['Space_Mono'] text-[#4DA2FF] break-all">
+              <div className="text-xs text-[#4DA2FF] break-all">
                 0x7a9d19d4c210663926eb549da59a54e25777fef63161bfccda08277b58b4212e
               </div>
             </div>
@@ -366,7 +392,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#030F1C] text-[#e6f7fd] font-['Orbitron'] relative overflow-hidden">
+    <div className="min-h-screen bg-[#030F1C] text-white font-['Orbitron'] relative overflow-hidden">
       <div
         id="ripple"
         ref={rippleRef}
@@ -383,13 +409,19 @@ export default function App() {
       
       <ThunderEffect show={sliderValue >= 80} />
       
-      <nav className="flex justify-between items-center px-4 sm:px-8 md:px-15 pt-4 sm:pt-6 md:pt-8 relative z-10">
-        <h1 className="text-lg sm:text-xl md:text-[1.8rem] font-black text-[#4DA2FF] uppercase tracking-[1px] sm:tracking-[2px] md:tracking-[3px] font-twk-everett">
+      <nav className="flex justify-between items-center px-4 sm:px-8 md:px-12 pt-3 sm:pt-6 md:pt-10 relative z-10">
+        <h1 className="text-lg sm:text-xl md:text-[1.8rem] font-black text-[#4DA2FF] uppercase tracking-[1px] sm:tracking-[2px] md:tracking-[3px] font-['Space_Mono']">
           FIRST MOVERS
         </h1>
         
-        <div className="flex gap-2 sm:gap-4 text-xs sm:text-sm text-[#e6f7fd] opacity-70 tracking-[0.5px] sm:tracking-[1px]">
-          <span className="cursor-pointer hover:text-[#4DA2FF] hidden sm:block">LOGIN</span>
+        <div className="flex gap-2 sm:gap-4 text-xs sm:text-sm text-white opacity-70 tracking-[0.5px] sm:tracking-[1px] items-center">
+          <span className="cursor-pointer hover:text-[#4DA2FF] hidden sm:block">New Here?</span>
+          <button className="bg-[#030F1C] text-white border-2 border-[#4DA2FF] px-3 py-2 text-xs font-bold text-center shadow-[0_0_3px_rgba(111,188,240,0.6)] cursor-pointer tracking-[0.5px] transition-all duration-200 hover:bg-[#4DA2FF] hover:text-[#121317] hover:scale-105 hidden sm:block md:hidden">
+            CONNECT
+          </button>
+          <button className="bg-[#030F1C] text-white border-2 border-[#4DA2FF] px-3 py-2 text-xs font-bold text-center shadow-[0_0_3px_rgba(111,188,240,0.6)] cursor-pointer tracking-[0.5px] transition-all duration-200 hover:bg-[#4DA2FF] hover:text-[#121317] hover:scale-105 hidden sm:hidden md:block">
+            CONNECT WALLET
+          </button>
           <span
             ref={socialsRef}
             className="relative inline-flex items-center cursor-pointer text-[#4DA2FF] font-bold tracking-[0.5px] sm:tracking-[1px] select-none"
@@ -403,16 +435,16 @@ export default function App() {
               <polyline points="6 9 12 15 18 9" />
             </svg>
             {showSocials && (
-              <div className="absolute mt-5 sm:mt-4 md:mt-6 top-full right-0 min-w-[140px] sm:min-w-[160px] bg-[#050F1E] border-2 border-[#e6f7fd] z-50 py-0.5 flex flex-col font-['Space_Mono']">
-                <a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[#e6f7fd] no-underline text-xs sm:text-sm py-2 px-3 sm:px-4 hover:bg-[#23262f] hover:text-[#4DA2FF] transition-colors duration-150">
+              <div className="absolute mt-2 sm:mt-2 md:mt-4 top-full right-0 min-w-[140px] sm:min-w-[160px] bg-[#050F1E] border-2 border-white z-50 py-0.5 flex flex-col font-['Space_Mono']">
+                <a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white no-underline text-xs sm:text-sm py-2 px-3 sm:px-4 hover:bg-[#23262f] hover:text-[#4DA2FF] transition-colors duration-150">
                   <FaGithub className="text-[#4DA2FF] flex-shrink-0" />
                   Github
                 </a>
-                <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[#e6f7fd] no-underline text-xs sm:text-sm py-2 px-3 sm:px-4 hover:bg-[#23262f] hover:text-[#4DA2FF] transition-colors duration-150">
+                <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white no-underline text-xs sm:text-sm py-2 px-3 sm:px-4 hover:bg-[#23262f] hover:text-[#4DA2FF] transition-colors duration-150">
                   <FaTwitter className="text-[#4DA2FF] flex-shrink-0" />
                   Twitter
                 </a>
-                <a href="https://discord.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[#e6f7fd] no-underline text-xs sm:text-sm py-2 px-3 sm:px-4 hover:bg-[#23262f] hover:text-[#4DA2FF] transition-colors duration-150">
+                <a href="https://discord.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white no-underline text-xs sm:text-sm py-2 px-3 sm:px-4 hover:bg-[#23262f] hover:text-[#4DA2FF] transition-colors duration-150">
                   <FaDiscord className="text-[#4DA2FF] flex-shrink-0" />
                   Discord
                 </a>
@@ -428,25 +460,25 @@ export default function App() {
         </div>
       </div>
 
-      <div className="absolute top-12 sm:top-16 md:top-20 left-2 sm:left-8 md:left-15 w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 border-t-2 sm:border-t-3 md:border-t-4 border-l-2 sm:border-l-3 md:border-l-4 border-[#e6f7fd] z-5"></div>
-      <div className="absolute top-12 sm:top-16 md:top-20 right-2 sm:right-8 md:right-15 w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 border-t-2 sm:border-t-3 md:border-t-4 border-r-2 sm:border-r-3 md:border-r-4 border-[#e6f7fd] z-5"></div>
+      <div className="absolute top-2 sm:top-4 md:top-6 left-2 sm:left-4 md:left-6 w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 border-t-2 sm:border-t-3 md:border-t-4 border-l-2 sm:border-l-3 md:border-l-4 border-white z-5"></div>
+      <div className="absolute top-2 sm:top-4 md:top-6 right-2 sm:right-4 md:right-6 w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 border-t-2 sm:border-t-3 md:border-t-4 border-r-2 sm:border-r-3 md:border-r-4 border-white z-5"></div>
       
       <div className="absolute bottom-20 sm:bottom-24 md:bottom-28 left-1/2 transform -translate-x-1/2 z-10 flex gap-4 sm:gap-6">
-        <button className="bg-[#030F1C] text-[#e6f7fd] border-2 border-[#4DA2FF] px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold text-center shadow-[0_0_3px_rgba(111,188,240,0.6)] cursor-pointer tracking-[0.5px] sm:tracking-[1px] transition-all duration-200 hover:bg-[#4DA2FF] hover:text-[#121317] hover:scale-105">
+        <button className="bg-[#030F1C] text-white border-2 border-[#4DA2FF] px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold text-center shadow-[0_0_3px_rgba(111,188,240,0.6)] cursor-pointer tracking-[0.5px] sm:tracking-[1px] transition-all duration-200 hover:bg-[#4DA2FF] hover:text-[#121317] hover:scale-105 sm:hidden">
           NEW HERE?
         </button>
-        <button className="bg-[#030F1C] text-[#e6f7fd] border-2 border-[#4DA2FF] px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold text-center shadow-[0_0_3px_rgba(111,188,240,0.6)] cursor-pointer tracking-[0.5px] sm:tracking-[1px] transition-all duration-200 hover:bg-[#4DA2FF] hover:text-[#121317] hover:scale-105 sm:hidden">
-          LOGIN
+        <button className="bg-[#030F1C] text-white border-2 border-[#4DA2FF] px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold text-center shadow-[0_0_3px_rgba(111,188,240,0.6)] cursor-pointer tracking-[0.5px] sm:tracking-[1px] transition-all duration-200 hover:bg-[#4DA2FF] hover:text-[#121317] hover:scale-105 sm:hidden">
+          CONNECT
         </button>
       </div>
       
-      <div className="absolute bottom-14 sm:bottom-16 md:bottom-20 left-2 sm:left-8 md:left-15 w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 border-b-2 sm:border-b-3 md:border-b-4 border-l-2 sm:border-l-3 md:border-l-4 border-[#e6f7fd] z-5"></div>
-      <div className="absolute bottom-14 sm:bottom-16 md:bottom-20 right-2 sm:right-8 md:right-15 w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 border-b-2 sm:border-b-3 md:border-b-4 border-r-2 sm:border-r-3 md:border-r-4 border-[#e6f7fd] z-5"></div>
+      <div className="absolute bottom-12 sm:bottom-16 md:bottom-20 left-2 sm:left-4 md:left-6 w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 border-b-2 sm:border-b-3 md:border-b-4 border-l-2 sm:border-l-3 md:border-l-4 border-white z-5"></div>
+      <div className="absolute bottom-12 sm:bottom-16 md:bottom-20 right-2 sm:right-4 md:right-6 w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 border-b-2 sm:border-b-3 md:border-b-4 border-r-2 sm:border-r-3 md:border-r-4 border-white z-5"></div>
       
-      <footer className="absolute bottom-0 w-full h-[40px] sm:h-[50px] flex justify-around items-center px-4 sm:px-8 md:px-15 bg-[#050F1E] border-t-2 border-[#2e3b4e] font-['Orbitron'] text-xs sm:text-sm text-[#e6f7fd] opacity-85 tracking-[0.5px] sm:tracking-[1px] z-8">
+      <footer className="absolute bottom-0 w-full h-[40px] sm:h-[50px] flex justify-around items-center px-4 sm:px-8 md:px-15 bg-[#050F1E] border-t-2 border-[#2e3b4e] font-['Orbitron'] text-xs sm:text-sm text-white opacity-85 tracking-[0.5px] sm:tracking-[1px] z-8">
         <div className="flex gap-1 sm:gap-2">
           <span 
-            className={`text-[#e6f7fd] p-2 rounded cursor-pointer transition-all duration-200 ${activeTab === 'sui' ? 'bg-[#4DA2FF] bg-opacity-20' : 'opacity-50 hover:opacity-80'}`}
+            className={`text-white p-2 rounded cursor-pointer transition-all duration-200 ${activeTab === 'sui' ? 'bg-[#4DA2FF] bg-opacity-20' : 'opacity-50 hover:opacity-80'}`}
             onClick={() => setActiveTab('sui')}
           >
             SUI DROP
@@ -454,7 +486,7 @@ export default function App() {
         </div>
         <div className="flex gap-1 sm:gap-2">
           <span 
-            className={`text-[#e6f7fd] p-2 rounded cursor-pointer transition-all duration-200 ${activeTab === 'nft' ? 'bg-[#4DA2FF] bg-opacity-20' : 'opacity-50 hover:opacity-80'}`}
+            className={`text-white p-2 rounded cursor-pointer transition-all duration-200 ${activeTab === 'nft' ? 'bg-[#4DA2FF] bg-opacity-20' : 'opacity-50 hover:opacity-80'}`}
             onClick={() => setActiveTab('nft')}
           >
             NFT DROP
@@ -462,7 +494,7 @@ export default function App() {
         </div>
         <div className="flex gap-1 sm:gap-2">
           <span 
-            className={`text-[#e6f7fd] p-2 rounded cursor-pointer transition-all duration-200 ${activeTab === 'refund' ? 'bg-[#4DA2FF] bg-opacity-20' : 'opacity-50 hover:opacity-80'}`}
+            className={`text-white p-2 rounded cursor-pointer transition-all duration-200 ${activeTab === 'refund' ? 'bg-[#4DA2FF] bg-opacity-20' : 'opacity-50 hover:opacity-80'}`}
             onClick={() => setActiveTab('refund')}
           >
             REFUND
