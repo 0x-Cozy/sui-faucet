@@ -327,9 +327,9 @@ export default function App() {
             <div className="w-full flex justify-center">
               <button 
                 onClick={handleCaptchaClick}
-                className={`w-32 h-12 mt-4 rounded-lg flex font-['Space_Mono'] items-center justify-center transition-all duration-300 text-xs cursor-pointer ${
+                className={`py-2 px-8 mt-4 rounded-sm flex font-['Space_Mono'] items-center justify-center transition-all duration-300 text-xs cursor-pointer ${
                   captchaCompleted 
-                    ? 'bg-[#4DA2FF] text-[#030F1C] border-2 border-[#4DA2FF] shadow-[0_0_10px_rgba(77,162,255,0.4)] hover:bg-[#030F1C] hover:text-[#4DA2FF] hover:scale-105' 
+                    ? 'bg-[#4DA2FF] text-[#030F1C] border-2 border-[#4DA2FF] shadow-[0_0_10px_rgba(77,162,255,0.2)] hover:bg-[#030F1C] hover:text-[#4DA2FF] hover:scale-105' 
                     : 'bg-[#011829] text-white border-2 border-[#2e3b4e] opacity-50 hover:opacity-80'
                 }`}
               >
@@ -354,10 +354,10 @@ export default function App() {
             <div className="w-full flex justify-center">
               <button 
                 onClick={handleCaptchaClick}
-                className={`w-32 h-12 mt-4 rounded-lg flex items-center justify-center transition-all duration-300 font-['Space_Mono'] text-xs cursor-pointer ${
+                className={`py-2 px-8 mt-4 rounded-sm flex font-['Space_Mono'] items-center justify-center transition-all duration-300 text-xs cursor-pointer ${
                   captchaCompleted 
-                    ? 'bg-[#4DA2FF] text-[#030F1C] border-2 border-[#4DA2FF] shadow-[0_0_10px_rgba(77,162,255,0.4)] hover:bg-[#030F1C] hover:text-[#4DA2FF] hover:scale-105' 
-                    : 'bg-[#011829] text-white border-2 border-[#2e3b4e] opacity-50 hover:opacity-80'
+                    ? 'bg-[#4DA2FF] text-bold text-[#030F1C] border-2 border-[#4DA2FF] shadow-[0_0_10px_rgba(77,162,255,0.2)] hover:bg-[#030F1C] hover:text-[#4DA2FF] hover:scale-105' 
+                    : 'bg-[#011829] text-bold text-white border-2 border-[#2e3b4e] opacity-50 hover:opacity-80'
                 }`}
               >
                 {captchaCompleted ? 'REQUEST NFT DROP' : 'CAPTCHA'}
