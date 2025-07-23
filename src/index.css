@@ -1,0 +1,25 @@
+@font-face {
+  font-family: 'Inter Tight Medium';
+  src: url('/InterTight-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'TWK Everett';
+  src: url('/twk/TWKEverett-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'TWK Everett';
+  src: url('/twk/TWKEverett-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

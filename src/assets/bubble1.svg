@@ -1,0 +1,20 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bubbleBlue" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#E6F7FF" stop-opacity="0.95"/>
+      <stop offset="80%" stop-color="#4DA2FF" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#011829" stop-opacity="0.3"/>
+    </radialGradient>
+    <radialGradient id="bubbleHighlight" cx="30%" cy="30%" r="30%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bubbleShadow" cx="70%" cy="80%" r="30%">
+      <stop offset="0%" stop-color="#011829" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#011829" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <ellipse cx="40" cy="40" rx="28" ry="24" fill="url(#bubbleBlue)"/>
+  <ellipse cx="30" cy="30" rx="10" ry="6" fill="url(#bubbleHighlight)"/>
+  <ellipse cx="50" cy="55" rx="12" ry="5" fill="url(#bubbleShadow)"/>
+</svg>
