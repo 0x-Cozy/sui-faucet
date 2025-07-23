@@ -460,6 +460,8 @@ export default function App() {
         </div>
       </div>
 
+      <div className="absolute top-2 sm:top-4 md:top-6 left-2 sm:left-4 md:left-6 w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 border-t-2 sm:border-t-3 md:border-t-4 border-l-2 sm:border-l-3 md:border-l-4 border-white z-5"></div>
+      <div className="absolute top-2 sm:top-4 md:top-6 right-2 sm:right-4 md:right-6 w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 border-t-2 sm:border-t-3 md:border-t-4 border-r-2 sm:border-r-3 md:border-r-4 border-white z-5"></div>
       
       <div className="absolute bottom-20 sm:bottom-24 md:bottom-28 left-1/2 transform -translate-x-1/2 z-10 flex gap-4 sm:gap-6">
         <button className="bg-[#030F1C] text-white border-2 border-[#4DA2FF] px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold text-center shadow-[0_0_3px_rgba(111,188,240,0.6)] cursor-pointer tracking-[0.5px] sm:tracking-[1px] transition-all duration-200 hover:bg-[#4DA2FF] hover:text-[#121317] hover:scale-105 sm:hidden">
@@ -470,15 +472,13 @@ export default function App() {
         </button>
       </div>
       
-      <div className="absolute top-2 sm:top-4 md:top-6 left-2 sm:left-4 md:left-6 w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 border-t-2 sm:border-t-3 md:border-t-4 border-l-2 sm:border-l-3 md:border-l-4 border-white z-5"></div>
-      <div className="absolute top-2 sm:top-4 md:top-6 right-2 sm:right-4 md:right-6 w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 border-t-2 sm:border-t-3 md:border-t-4 border-r-2 sm:border-r-3 md:border-r-4 border-white z-5"></div>
-      <div className="absolute bottom-2 sm:bottom-4 md:bottom-6 left-2 sm:left-4 md:left-6 w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 border-b-2 sm:border-b-3 md:border-b-4 border-l-2 sm:border-l-3 md:border-l-4 border-white z-5"></div>
-      <div className="absolute bottom-2 sm:bottom-4 md:bottom-6 right-2 sm:right-4 md:right-6 w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 border-b-2 sm:border-b-3 md:border-b-4 border-r-2 sm:border-r-3 md:border-r-4 border-white z-5"></div>
+      <div className="absolute bottom-12 sm:bottom-16 md:bottom-20 left-2 sm:left-4 md:left-6 w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 border-b-2 sm:border-b-3 md:border-b-4 border-l-2 sm:border-l-3 md:border-l-4 border-white z-5"></div>
+      <div className="absolute bottom-12 sm:bottom-16 md:bottom-20 right-2 sm:right-4 md:right-6 w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 border-b-2 sm:border-b-3 md:border-b-4 border-r-2 sm:border-r-3 md:border-r-4 border-white z-5"></div>
       
-      <footer className="absolute bottom-4 sm:bottom-6 md:bottom-8 w-full h-[40px] sm:h-[50px] flex justify-around items-center px-4 sm:px-8 md:px-15 text-xs sm:text-sm text-white opacity-85 tracking-[0.5px] sm:tracking-[1px] z-8">
+      <footer className="absolute bottom-0 w-full h-[40px] sm:h-[50px] flex justify-around items-center px-4 sm:px-8 md:px-15 bg-[#050F1E] border-t-2 border-[#2e3b4e] font-['Orbitron'] text-xs sm:text-sm text-white opacity-85 tracking-[0.5px] sm:tracking-[1px] z-8">
         <div className="flex gap-1 sm:gap-2">
           <span 
-            className={`text-white py-2 px-6 rounded cursor-pointer transition-all duration-200 ${activeTab === 'sui' ? 'bg-[#4DA2FF] bg-opacity-20' : 'opacity-50 hover:opacity-80'}`}
+            className={`text-white p-2 rounded cursor-pointer transition-all duration-200 ${activeTab === 'sui' ? 'bg-[#4DA2FF] bg-opacity-20' : 'opacity-50 hover:opacity-80'}`}
             onClick={() => setActiveTab('sui')}
           >
             SUI DROP
@@ -486,7 +486,7 @@ export default function App() {
         </div>
         <div className="flex gap-1 sm:gap-2">
           <span 
-            className={`text-white py-2 px-6 rounded cursor-pointer transition-all duration-200 ${activeTab === 'nft' ? 'bg-[#4DA2FF] bg-opacity-20' : 'opacity-50 hover:opacity-80'}`}
+            className={`text-white p-2 rounded cursor-pointer transition-all duration-200 ${activeTab === 'nft' ? 'bg-[#4DA2FF] bg-opacity-20' : 'opacity-50 hover:opacity-80'}`}
             onClick={() => setActiveTab('nft')}
           >
             NFT DROP
@@ -494,7 +494,7 @@ export default function App() {
         </div>
         <div className="flex gap-1 sm:gap-2">
           <span 
-            className={`text-white py-2 px-6 rounded cursor-pointer transition-all duration-200 ${activeTab === 'refund' ? 'bg-[#4DA2FF] bg-opacity-20' : 'opacity-50 hover:opacity-80'}`}
+            className={`text-white p-2 rounded cursor-pointer transition-all duration-200 ${activeTab === 'refund' ? 'bg-[#4DA2FF] bg-opacity-20' : 'opacity-50 hover:opacity-80'}`}
             onClick={() => setActiveTab('refund')}
           >
             REFUND
