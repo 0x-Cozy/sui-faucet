@@ -416,11 +416,8 @@ export default function App() {
         
         <div className="flex gap-2 sm:gap-4 text-xs sm:text-sm text-white opacity-70 tracking-[0.5px] sm:tracking-[1px] items-center">
           <span className="cursor-pointer hover:text-[#4DA2FF] hidden sm:block">New Here?</span>
-          <button className="bg-[#030F1C] text-white border-2 border-[#4DA2FF] px-3 py-2 text-xs font-bold text-center shadow-[0_0_3px_rgba(111,188,240,0.6)] cursor-pointer tracking-[0.5px] transition-all duration-200 hover:bg-[#4DA2FF] hover:text-[#121317] hover:scale-105 hidden sm:block md:hidden">
+          <button className="bg-[#030F1C] text-white border-2 border-[#4DA2FF] px-3 py-2 text-xs font-bold text-center shadow-[0_0_3px_rgba(111,188,240,0.6)] cursor-pointer tracking-[0.5px] transition-all duration-200 hover:bg-[#4DA2FF] hover:text-[#121317] hover:scale-105 hidden sm:block">
             CONNECT
-          </button>
-          <button className="bg-[#030F1C] text-white border-2 border-[#4DA2FF] px-3 py-2 text-xs font-bold text-center shadow-[0_0_3px_rgba(111,188,240,0.6)] cursor-pointer tracking-[0.5px] transition-all duration-200 hover:bg-[#4DA2FF] hover:text-[#121317] hover:scale-105 hidden sm:hidden md:block">
-            CONNECT WALLET
           </button>
           <span
             ref={socialsRef}
