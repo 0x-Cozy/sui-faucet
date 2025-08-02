@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import type { FooterProps } from '../types';
-import { useCurrentAccount, useDisconnectWallet, useWallets } from '@mysten/dapp-kit';
+import { useCurrentAccount, useDisconnectWallet } from '@mysten/dapp-kit';
 import { useNavigate } from 'react-router-dom';
 import { FaSignOutAlt, FaTimes, FaChevronUp } from 'react-icons/fa';
-import { isEnokiWallet } from '@mysten/enoki';
+//import { isEnokiWallet } from '@mysten/enoki';
 import NewHereModal from './NewHereModal';
 // import SendTokens from './SendTokens';
 
@@ -16,16 +16,16 @@ interface FooterWithConnectProps extends FooterProps {
 const Footer = ({ activeTab, setActiveTab, showDrawer, setShowDrawer, captchaCompleted }: FooterWithConnectProps) => {
   const currentAccount = useCurrentAccount();
   const { mutate: disconnect } = useDisconnectWallet();
-  const wallets = useWallets();
+  //const wallets = useWallets();
   const navigate = useNavigate();
   const [showConnectPopup, setShowConnectPopup] = useState(false);
   const [showNewHereModal, setShowNewHereModal] = useState(false);
   const [screenHeight, setScreenHeight] = useState(window.innerHeight);
   const drawerRef = useRef<HTMLDivElement>(null);
 
-  const isGoogleWallet = currentAccount && wallets.some(wallet => 
-    isEnokiWallet(wallet) && wallet.accounts.some(account => account.address === currentAccount.address)
-  );
+  //const isGoogleWallet = currentAccount && wallets.some(wallet => 
+  //  isEnokiWallet(wallet) && wallet.accounts.some(account => account.address === currentAccount.address)
+  //);
 
   useEffect(() => {
     const handleResize = () => {

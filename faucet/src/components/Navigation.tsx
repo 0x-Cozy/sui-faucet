@@ -1,9 +1,9 @@
 import { useRef, useState, useEffect } from 'react';
 import { FaGithub, FaDiscord, FaTwitter, FaChevronDown, FaSignOutAlt } from 'react-icons/fa';
 import { SOCIAL_LINKS } from '../constants';
-import { useCurrentAccount, useDisconnectWallet, useWallets } from '@mysten/dapp-kit';
+import { useCurrentAccount, useDisconnectWallet } from '@mysten/dapp-kit';
 import { useNavigate } from 'react-router-dom';
-import { isEnokiWallet } from '@mysten/enoki';
+//import { isEnokiWallet } from '@mysten/enoki';
 import NewHereModal from './NewHereModal';
 // import SendTokens from './SendTokens';
 
@@ -15,12 +15,12 @@ const Navigation = () => {
   const connectRef = useRef<HTMLDivElement>(null);
   const currentAccount = useCurrentAccount();
   const { mutate: disconnect } = useDisconnectWallet();
-  const wallets = useWallets();
+  //t wallets = useWallets();
   const navigate = useNavigate();
 
-  const isGoogleWallet = currentAccount && wallets.some(wallet => 
-    isEnokiWallet(wallet) && wallet.accounts.some(account => account.address === currentAccount.address)
-  );
+  //const isGoogleWallet = currentAccount && wallets.some(wallet => 
+    //isEnokiWallet(wallet) && wallet.accounts.some(account => account.address === currentAccount.address)
+  //);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

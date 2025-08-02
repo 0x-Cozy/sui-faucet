@@ -1,26 +1,29 @@
 import { REFUND_ADDRESS } from '../constants';
-import { useCurrentAccount, useSuiClient, useSignTransaction } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSuiClient } from '@mysten/dapp-kit';
 import { useEffect, useState, useCallback } from 'react';
 import { FaCopy, FaCheck } from 'react-icons/fa';
-import { Transaction } from '@mysten/sui/transactions';
+// import { Transaction } from '@mysten/sui/transactions';
 
 const RefundContent = () => {
   const currentAccount = useCurrentAccount();
   const suiClient = useSuiClient();
   
+
   const [refundBalance, setRefundBalance] = useState<string>('');
   const [copied, setCopied] = useState<boolean>(false);
-  const [loading, setLoading] = useState(false);
-  const [txnDigest, setTxnDigest] = useState('');
+  // const [loading, setLoading] = useState(false);
+  // const [txnDigest, setTxnDigest] = useState('');
   const [userCoins, setUserCoins] = useState<any[]>([]);
 
-  const { mutate: signTransaction } = useSignTransaction();
+  // const { mutate: signTransaction } = useSignTransaction();
 
   const getBalance = useCallback(
     async (walletAddress: string) => {
       if (!walletAddress || !suiClient) {
         setRefundBalance('');
+        console.log(refundBalance)
         setUserCoins([]);
+        console.log(userCoins)
         console.warn('Cannot fetch balance: Wallet address or SuiClient not available.');
         return;
       }
@@ -191,11 +194,11 @@ const RefundContent = () => {
     }
   }, [currentAccount?.address, suiClient, getBalance]);
 
-  const formatBalance = (balance: string) => {
+  /*const formatBalance = (balance: string) => {
     if (!balance) return '0';
     const balanceNum = parseFloat(balance);
     return balanceNum.toFixed(4);
-  };
+  };*/
 
   return (
     <div className="flex flex-col space-y-6 items-center text-center w-80 sm:w-96">
