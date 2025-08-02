@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model FaucetRequest {
+  id            String   @id @default(cuid())
+  walletAddress String
+  amount        Float    @default(0.1)
+  ip            String
+  userAgent     String?
+  txHash        String?
+  success       Boolean  @default(false)
+  error         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([walletAddress])
+  @@index([ip])
+  @@index([createdAt])
+}
+
+model RequestHistory {
+  id            String   @id @default(cuid())
+  walletAddress String
+  amount        Float
+  source        String   // 'frontend' or 'discord'
+  discordUserId String?
+  ip            String?
+  txHash        String?
+  success       Boolean
+  error         String?
+  rateLimitInfo String?  // JSON as string for SQLite
+  createdAt     DateTime @default(now())
+
+  @@index([walletAddress])
+  @@index([discordUserId])
+  @@index([source])
+  @@index([createdAt])
+  @@index([success])
+}
+
+model DiscordRoleConfig {
+  id          String   @id @default(cuid())
+  guildId     String   @unique
+  adminRoleId String?
+  modRoleId   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([guildId])
+}
+
+model RefundRequest {
+  id            String   @id @default(cuid())
+  walletAddress String
+  amount        Float
+  refundedBy    String   // Who made the refund (wallet address or user ID)
+  txHash        String?  // Transaction hash of the refund
+  createdAt     DateTime @default(now())
+
+  @@index([walletAddress])
+  @@index([refundedBy])
+  @@index([createdAt])
+}
+
+model RateLimit {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  points    Int      @default(0)
+  resetTime DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([key])
+  @@index([resetTime])
+}
+
+model AdminLog {
+  id        String   @id @default(cuid())
+  action    String
+  details   String?  // JSON as string for SQLite
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([action])
+  @@index([createdAt])
+} 

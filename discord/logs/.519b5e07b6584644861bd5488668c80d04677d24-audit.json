@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "logs/.519b5e07b6584644861bd5488668c80d04677d24-audit.json",
+    "files": [
+        {
+            "date": 1754114165596,
+            "name": "logs/discord-bot-2025-08-02.log",
+            "hash": "7f4b33311dac64d6a8b8b22c17824f714e248e59c51eb580841c4a58b5676514"
+        }
+    ],
+    "hashType": "sha256"
+}

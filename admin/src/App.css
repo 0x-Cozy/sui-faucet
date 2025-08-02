@@ -63,6 +63,14 @@
   z-index: 100;
 }
 
+.text-sui-blue {
+  color: #4DA2FF;
+}
+
+.border-sui-blue {
+  border-color: #4DA2FF;
+}
+
 .bg-sui-dark {
   background-color: #011829;
 }
@@ -110,7 +118,6 @@
     min-width: 44px;
   }
 
-  /* spacing for mobile */
   .space-y-2 > * + * {
     margin-top: 0.5rem;
   }
