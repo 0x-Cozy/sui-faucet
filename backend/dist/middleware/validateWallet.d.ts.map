@@ -1,0 +1,1 @@
+{"version":3,"file":"validateWallet.d.ts","sourceRoot":"","sources":["../../src/middleware/validateWallet.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,QAAQ,EAAE,YAAY,EAAE,MAAM,SAAS,CAAA;AAGzD,eAAO,MAAM,cAAc,GAAI,KAAK,OAAO,EAAE,KAAK,QAAQ,EAAE,MAAM,YAAY,KAAG,IAsBhF,CAAA"}

@@ -15,9 +15,9 @@ export const config = {
   },
   
   rateLimit: {
-    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '60000'), // 1 minute for testing
-    maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '10'), // 10 requests per minute for testing
-    blockDurationMs: parseInt(process.env.RATE_LIMIT_BLOCK_DURATION_MS || '300000') // 5 minutes for testing
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '43200000'), // 12 hours (12 * 60 * 60 * 1000)
+    maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '1'), // 1 request per 12 hours
+    blockDurationMs: parseInt(process.env.RATE_LIMIT_BLOCK_DURATION_MS || '43200000') // 12 hours block duration
   },
   
   redis: {
@@ -30,7 +30,7 @@ export const config = {
   },
   
   database: {
-    url: process.env.DATABASE_URL || 'postgresql://user:password@localhost:5432/sui_faucet'
+    url: process.env.DATABASE_URL || 'postgresql://first_move_user:nafPU0DKOGSvPIRbflpd6cm7A92vNG9Z@dpg-d27ad1muk2gs73dqpi80-a.oregon-postgres.render.com/first_move'
   },
   
   admin: {
