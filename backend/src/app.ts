@@ -13,8 +13,10 @@ app.set('trust proxy', true)
 // middleware
 app.use(express.json())
 app.use(cors({
-  origin: config.cors.origin,
-  credentials: true
+  origin: true,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key']
 }))
 
 // routes
