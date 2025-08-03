@@ -37,12 +37,6 @@ A comprehensive Sui blockchain faucet application with web frontend, Discord bot
 - **Dark Theme**: Modern dark UI with Sui branding
 - **Loading States**: Skeleton loaders and progress indicators
 - **Copy-to-Clipboard**: One-click copying of wallet addresses and transaction hashes
-- **Auto-Clearing Alerts**: Success/failure messages automatically disappear
-
-### **Refund System**
-- **Copy Method**: Simple copy-to-clipboard for refund address
-- **Transaction History**: Track all refund requests in admin dashboard
-- **No Approval Workflow**: Direct refund processing
 
 ### **Navigation & Layout**
 - **Dynamic Footer**: "NEW HERE?" and "CONNECT" buttons for screens >740px height
@@ -71,7 +65,6 @@ A comprehensive Sui blockchain faucet application with web frontend, Discord bot
 ### **Rate Limiting & Security**
 - **Discord User ID + Wallet Rate Limiting**: Unified with frontend limits
 - **API Key Authentication**: Secure backend access for Discord bot
-- **IP Tracking**: Discord user IP logging for analytics
 - **Transaction Logging**: Complete audit trail of all requests
 
 ### **Rich Embeds & Notifications**
@@ -95,13 +88,6 @@ A comprehensive Sui blockchain faucet application with web frontend, Discord bot
   - `GET /api/admin/transactions/*`: Transaction history
   - `POST /api/admin/bot/pause|unpause`: Bot control
   - `POST /api/admin/restrictions/*`: User/IP/wallet restrictions
-
-### **Database Management**
-- **PostgreSQL Integration**: Scalable database with full ACID compliance
-- **Prisma ORM**: Type-safe database operations
-- **Request History**: Complete audit trail of all faucet requests
-- **Rate Limit Storage**: Redis-based rate limiting with persistence
-- **Admin Logs**: Administrative action tracking
 
 ### **Security Features**
 - **JWT Authentication**: Secure admin dashboard access
