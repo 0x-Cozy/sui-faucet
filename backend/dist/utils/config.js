@@ -43,9 +43,7 @@ exports.config = {
         secretKey: process.env.HCAPTCHA_SECRET_KEY || ''
     },
     cors: {
-        origin: process.env.NODE_ENV === 'production'
-            ? ['https://firstmovers.com']
-            : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174']
+        origin: '*'
     }
 };
 //# sourceMappingURL=config.js.map

@@ -34,7 +34,7 @@ export declare const config: {
         secretKey: string;
     };
     cors: {
-        origin: string[];
+        origin: string;
     };
 };
 //# sourceMappingURL=config.d.ts.map
