@@ -48,7 +48,7 @@ export const config = {
   
   cors: {
     origin: process.env.NODE_ENV === 'production' 
-      ? ['https://firstmovers.com'] 
+      ? ['https://first-movers-faucet.vercel.app', 'https://first-movers-001.vercel.app'] 
       : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174']
   }
 } 
