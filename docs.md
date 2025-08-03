@@ -7,7 +7,7 @@ A comprehensive Sui blockchain faucet application with web frontend, Discord bot
 
 - **Main Faucet**: [https://first-movers-faucet.vercel.app](https://first-movers-faucet.vercel.app)
 - **Admin Dashboard**: [https://first-movers-001.vercel.app](https://first-movers-001.vercel.app)
-- **Discord Bot Screenshots**
+- **Discord Bot In Action**
 ![Discord bot in action](https://i.ibb.co/JFmvMq6X/81192379-e2be-4e91-be91-cafc4328e28a.png)
 
 ![Discord bot in action](https://i.ibb.co/ynxVzgH1/77bcbd3d-7d9b-4e5b-ab4e-9f2ee11e5da1.png)
