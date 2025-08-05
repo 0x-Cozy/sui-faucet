@@ -94,6 +94,8 @@ export const execute = async (interaction: any) => {
         const reason = interaction.options.getString('reason', true);
         const duration = interaction.options.getInteger('duration') || 0; // 0 = permanent
 
+        await interaction.deferReply();
+
         try {
           const durationSeconds = duration > 0 ? duration * 3600 : undefined; // Convert hours to seconds
           const response = await api.restrictDiscordUser(user.id, reason, durationSeconds);
@@ -110,19 +112,21 @@ export const execute = async (interaction: any) => {
               )
               .setTimestamp();
 
-            await interaction.reply({ embeds: [embed] });
+            await interaction.editReply({ embeds: [embed] });
           } else {
-            await interaction.reply({ content: '❌ Failed to restrict user.', ephemeral: true });
+            await interaction.editReply({ content: '❌ Failed to restrict user.' });
           }
         } catch (error) {
           logger.error('Failed to restrict user:', error);
-          await interaction.reply({ content: '❌ Failed to restrict user.', ephemeral: true });
+          await interaction.editReply({ content: '❌ Failed to restrict user.' });
         }
         break;
       }
 
       case 'unrestrict': {
         const user = interaction.options.getUser('user', true);
+
+        await interaction.deferReply();
 
         try {
           const response = await api.unrestrictDiscordUser(user.id);
@@ -137,19 +141,21 @@ export const execute = async (interaction: any) => {
               )
               .setTimestamp();
 
-            await interaction.reply({ embeds: [embed] });
+            await interaction.editReply({ embeds: [embed] });
           } else {
-            await interaction.reply({ content: '❌ Failed to unrestrict user.', ephemeral: true });
+            await interaction.editReply({ content: '❌ Failed to unrestrict user.' });
           }
         } catch (error) {
           logger.error('Failed to unrestrict user:', error);
-          await interaction.reply({ content: '❌ Failed to unrestrict user.', ephemeral: true });
+          await interaction.editReply({ content: '❌ Failed to unrestrict user.' });
         }
         break;
       }
 
       case 'history': {
         const user = interaction.options.getUser('user', true);
+
+        await interaction.deferReply();
 
         try {
           const response = await api.getUserHistory(user.id);
@@ -164,7 +170,7 @@ export const execute = async (interaction: any) => {
                 .setDescription(`**${user.username}** has no faucet history.`)
                 .setTimestamp();
 
-              await interaction.reply({ embeds: [embed] });
+              await interaction.editReply({ embeds: [embed] });
             } else {
               const embed = new EmbedBuilder()
                 .setColor(0x0099ff)
@@ -190,14 +196,14 @@ export const execute = async (interaction: any) => {
               }
 
               embed.addFields({ name: 'Recent Activity', value: historyText || 'No recent activity' });
-              await interaction.reply({ embeds: [embed] });
+              await interaction.editReply({ embeds: [embed] });
             }
           } else {
-            await interaction.reply({ content: '❌ Failed to get user history.', ephemeral: true });
+            await interaction.editReply({ content: '❌ Failed to get user history.' });
           }
         } catch (error) {
           logger.error('Failed to get user history:', error);
-          await interaction.reply({ content: '❌ Failed to get user history.', ephemeral: true });
+          await interaction.editReply({ content: '❌ Failed to get user history.' });
         }
         break;
       }

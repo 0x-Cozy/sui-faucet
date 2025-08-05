@@ -60,8 +60,10 @@ export const sendTokens = async (toAddress: string, amount: number = 0.1): Promi
     throw new Error('faucet keypair not initialized')
   }
   
+  const amountInMist = Math.floor(amount * 1000000000)
+  
   const tx = new Transaction()
-  const [coin] = tx.splitCoins(tx.gas, [amount * 1000000000])
+  const [coin] = tx.splitCoins(tx.gas, [amountInMist])
   tx.transferObjects([coin], toAddress)
   
   const result = await client.signAndExecuteTransaction({

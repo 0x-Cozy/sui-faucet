@@ -130,7 +130,7 @@ export class BackendAPI {
   // Bot state management
   async getBotStatus(): Promise<any> {
     try {
-      const response: AxiosResponse<any> = await this.client.get('/api/admin/bot/status');
+      const response: AxiosResponse<any> = await this.client.get('/api/discord/bot/status');
       return response.data;
     } catch (error: any) {
       logger.error('Bot status failed:', error.response?.data || error.message);
@@ -140,7 +140,7 @@ export class BackendAPI {
 
   async pauseBot(reason: string, pausedBy: string): Promise<any> {
     try {
-      const response: AxiosResponse<any> = await this.client.post('/api/admin/bot/pause', 
+      const response: AxiosResponse<any> = await this.client.post('/api/discord/bot/pause', 
         { reason },
         { headers: { 'X-Admin-User': pausedBy } }
       );
@@ -153,7 +153,7 @@ export class BackendAPI {
 
   async unpauseBot(unpausedBy: string): Promise<any> {
     try {
-      const response: AxiosResponse<any> = await this.client.post('/api/admin/bot/unpause',
+      const response: AxiosResponse<any> = await this.client.post('/api/discord/bot/unpause',
         {},
         { headers: { 'X-Admin-User': unpausedBy } }
       );
@@ -176,8 +176,7 @@ export class BackendAPI {
 
   async setRoleConfig(guildId: string, adminRoleId?: string, modRoleId?: string): Promise<any> {
     try {
-      const response: AxiosResponse<any> = await this.client.post('/api/admin/roles/config', {
-        guildId,
+      const response: AxiosResponse<any> = await this.client.post(`/api/discord/roles/${guildId}`, {
         adminRoleId,
         modRoleId
       });
@@ -191,7 +190,7 @@ export class BackendAPI {
   // restriction
   async restrictDiscordUser(discordUserId: string, reason: string, duration?: number): Promise<any> {
     try {
-      const response: AxiosResponse<any> = await this.client.post('/api/admin/restrict/discord', {
+      const response: AxiosResponse<any> = await this.client.post('/api/discord/restrict/discord', {
         discordUserId,
         reason,
         duration
@@ -205,7 +204,7 @@ export class BackendAPI {
 
   async unrestrictDiscordUser(discordUserId: string): Promise<any> {
     try {
-      const response: AxiosResponse<any> = await this.client.post('/api/admin/unrestrict/discord', {
+      const response: AxiosResponse<any> = await this.client.post('/api/discord/unrestrict/discord', {
         discordUserId
       });
       return response.data;
@@ -217,7 +216,7 @@ export class BackendAPI {
 
   async getDiscordUserRestriction(discordUserId: string): Promise<any> {
     try {
-      const response: AxiosResponse<any> = await this.client.get(`/api/admin/restrict/discord/${discordUserId}`);
+      const response: AxiosResponse<any> = await this.client.get(`/api/discord/restrict/discord/${discordUserId}`);
       return response.data;
     } catch (error: any) {
       logger.error('Discord user restriction check failed:', error.response?.data || error.message);

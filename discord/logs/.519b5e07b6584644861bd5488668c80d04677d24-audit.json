@@ -9,6 +9,11 @@
             "date": 1754114165596,
             "name": "logs/discord-bot-2025-08-02.log",
             "hash": "7f4b33311dac64d6a8b8b22c17824f714e248e59c51eb580841c4a58b5676514"
+        },
+        {
+            "date": 1754357600892,
+            "name": "logs/discord-bot-2025-08-05.log",
+            "hash": "e207a607ee3faf14ba8ba94d9375391d3c19f340ca277a43a1db4fbf87dc1a98"
         }
     ],
     "hashType": "sha256"

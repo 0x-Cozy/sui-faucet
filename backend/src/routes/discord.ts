@@ -4,6 +4,10 @@ import { checkDiscordRateLimit, consumeDiscordRateLimit } from '../services/disc
 import { sendTokens, getUserBalance } from '../services/suiService'
 import { logRequest } from '../services/historyService'
 import { getRoleConfig, setRoleConfig } from '../services/discordRoleService'
+import { getBotStatus, pauseBot, unpauseBot } from '../services/botStateService'
+import { 
+  restrictDiscordUser, unrestrictDiscordUser, isDiscordUserRestricted
+} from '../services/restrictionService'
 
 const router = Router()
 
@@ -132,7 +136,7 @@ router.get('/faucet/status', async (req: Request, res: Response) => {
         })
       }
     } else {
-      // General status
+      // general status
       res.json({
         success: true,
         message: 'faucet is operational',
@@ -196,6 +200,132 @@ router.post('/roles/:guildId', async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       error: 'failed to update role configuration'
+    })
+  }
+})
+
+router.get('/bot/status', async (req: Request, res: Response) => {
+  try {
+    const status = await getBotStatus()
+    res.json({
+      success: true,
+      status
+    })
+  } catch (error) {
+    console.error('Failed to get bot status:', error)
+    res.status(500).json({
+      success: false,
+      error: 'failed to get bot status'
+    })
+  }
+})
+
+router.post('/bot/pause', async (req: Request, res: Response) => {
+  try {
+    const { reason } = req.body
+    const pausedBy = req.headers['x-admin-user'] as string || 'discord-bot'
+    
+    await pauseBot(reason, pausedBy)
+    
+    res.json({
+      success: true,
+      message: 'bot paused successfully'
+    })
+  } catch (error) {
+    console.error('Failed to pause bot:', error)
+    res.status(500).json({
+      success: false,
+      error: 'failed to pause bot'
+    })
+  }
+})
+
+router.post('/bot/unpause', async (req: Request, res: Response) => {
+  try {
+    const unpausedBy = req.headers['x-admin-user'] as string || 'discord-bot'
+    
+    await unpauseBot(unpausedBy)
+    
+    res.json({
+      success: true,
+      message: 'bot unpaused successfully'
+    })
+  } catch (error) {
+    console.error('Failed to unpause bot:', error)
+    res.status(500).json({
+      success: false,
+      error: 'failed to unpause bot'
+    })
+  }
+})
+
+router.post('/restrict/discord', async (req: Request, res: Response) => {
+  try {
+    const { discordUserId, reason, duration } = req.body
+    
+    if (!discordUserId || !reason) {
+      return res.status(400).json({
+        success: false,
+        error: 'discord user id and reason required'
+      })
+    }
+    
+    await restrictDiscordUser(discordUserId, reason, duration)
+    
+    res.json({
+      success: true,
+      message: 'discord user restricted successfully'
+    })
+  } catch (error) {
+    console.error('Failed to restrict discord user:', error)
+    res.status(500).json({
+      success: false,
+      error: 'failed to restrict discord user'
+    })
+  }
+})
+
+router.post('/unrestrict/discord', async (req: Request, res: Response) => {
+  try {
+    const { discordUserId } = req.body
+    
+    if (!discordUserId) {
+      return res.status(400).json({
+        success: false,
+        error: 'discord user id required'
+      })
+    }
+    
+    await unrestrictDiscordUser(discordUserId)
+    
+    res.json({
+      success: true,
+      message: 'discord user unrestricted successfully'
+    })
+  } catch (error) {
+    console.error('Failed to unrestrict discord user:', error)
+    res.status(500).json({
+      success: false,
+      error: 'failed to unrestrict discord user'
+    })
+  }
+})
+
+router.get('/restrict/discord/:discordUserId', async (req: Request, res: Response) => {
+  try {
+    const { discordUserId } = req.params
+    
+    const isRestricted = await isDiscordUserRestricted(discordUserId)
+    
+    res.json({
+      success: true,
+      isRestricted
+    })
+  } catch (error) {
+    console.error('Failed to check discord user restriction:', error)
+    res.status(500).json({
+      success: false,
+      error: 'failed to check discord user restriction'
     })
   }
 })

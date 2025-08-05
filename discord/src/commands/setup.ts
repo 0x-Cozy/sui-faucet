@@ -61,6 +61,8 @@ export const execute = async (interaction: any) => {
       return;
     }
 
+    await interaction.deferReply({ ephemeral: true });
+
     const api = new BackendAPI(
       process.env.BACKEND_URL || 'http://localhost:3001',
       process.env.API_KEY
@@ -81,26 +83,27 @@ export const execute = async (interaction: any) => {
           )
           .setTimestamp();
 
-        await interaction.reply({ embeds: [embed], ephemeral: true });
+        await interaction.editReply({ embeds: [embed] });
         logger.info(`Bot roles configured for guild ${guild.id} by ${interaction.user.id}`);
       } else {
-        await interaction.reply({ 
-          content: '❌ Failed to update bot configuration. Please try again later.',
-          ephemeral: true 
+        await interaction.editReply({ 
+          content: '❌ Failed to update bot configuration. Please try again later.'
         });
       }
     } catch (error) {
       logger.error('Failed to set role config:', error);
-      await interaction.reply({ 
-        content: '❌ Failed to update bot configuration. Please try again later.',
-        ephemeral: true 
+      await interaction.editReply({ 
+        content: '❌ Failed to update bot configuration. Please try again later.'
       });
     }
   } catch (error) {
     logger.error('Setup command error:', error);
-    await interaction.reply({ 
-      content: '❌ An error occurred while configuring the bot. Please try again.',
-      ephemeral: true 
-    });
+    try {
+      await interaction.editReply({ 
+        content: '❌ An error occurred while configuring the bot. Please try again.'
+      });
+    } catch (replyError) {
+      logger.error('Failed to send error reply:', replyError);
+    }
   }
 }; 
