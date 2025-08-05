@@ -5,6 +5,8 @@ import faucetRoutes from './routes/faucet'
 import discordRoutes from './routes/discord'
 import adminRoutes from './routes/admin'
 import refundRoutes from './routes/refund'
+import apiRoutes from './routes/api'
+import apiFaucetRoutes from './routes/apiFaucet'
 
 const app = express()
 
@@ -13,7 +15,7 @@ app.set('trust proxy', true)
 // middleware
 app.use(express.json())
 
-// CORS explicit headers
+// cors explicit headers
 app.use(cors({
   origin: true,
   credentials: true,
@@ -37,6 +39,8 @@ app.use('/api/faucet', faucetRoutes)
 app.use('/api/discord', discordRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/refund', refundRoutes)
+app.use('/api', apiRoutes)
+app.use('/api', apiFaucetRoutes)
 
 // health check
 app.get('/health', (req, res) => {

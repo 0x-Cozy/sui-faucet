@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 export interface RequestHistoryData {
   walletAddress: string;
   amount: number;
-  source: 'frontend' | 'discord';
+  source: 'frontend' | 'discord' | 'api';
   discordUserId?: string;
   ip?: string;
   txHash?: string;

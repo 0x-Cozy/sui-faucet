@@ -9,11 +9,13 @@ const faucet_1 = __importDefault(require("./routes/faucet"));
 const discord_1 = __importDefault(require("./routes/discord"));
 const admin_1 = __importDefault(require("./routes/admin"));
 const refund_1 = __importDefault(require("./routes/refund"));
+const api_1 = __importDefault(require("./routes/api"));
+const apiFaucet_1 = __importDefault(require("./routes/apiFaucet"));
 const app = (0, express_1.default)();
 app.set('trust proxy', true);
 // middleware
 app.use(express_1.default.json());
-// CORS explicit headers
+// CORS configuration - explicit headers
 app.use((0, cors_1.default)({
     origin: true,
     credentials: true,
@@ -23,6 +25,7 @@ app.use((0, cors_1.default)({
     preflightContinue: false,
     optionsSuccessStatus: 200
 }));
+// Additional CORS headers for all responses
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -35,6 +38,8 @@ app.use('/api/faucet', faucet_1.default);
 app.use('/api/discord', discord_1.default);
 app.use('/api/admin', admin_1.default);
 app.use('/api/refund', refund_1.default);
+app.use('/api', api_1.default);
+app.use('/api', apiFaucet_1.default);
 // health check
 app.get('/health', (req, res) => {
     res.json({ status: 'ok' });

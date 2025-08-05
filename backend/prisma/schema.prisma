@@ -89,4 +89,34 @@ model AdminLog {
 
   @@index([action])
   @@index([createdAt])
+}
+
+model ApiApp {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?
+  walletAddress String
+  apiKey        String   @unique
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  usage ApiUsage[]
+
+  @@index([walletAddress])
+  @@index([apiKey])
+}
+
+model ApiUsage {
+  id        String   @id @default(cuid())
+  appId     String
+  app       ApiApp   @relation(fields: [appId], references: [id])
+  endpoint  String
+  ip        String?
+  success   Boolean  @default(false)
+  error     String?
+  createdAt DateTime @default(now())
+
+  @@index([appId])
+  @@index([createdAt])
 } 

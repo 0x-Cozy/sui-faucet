@@ -13,6 +13,8 @@ import "@mysten/dapp-kit/dist/index.css";
 import "./App.css";
 
 import { ThunderEffect, Navigation, Footer, CornerDecorations, TabContent } from './components';
+import ApiManagement from './components/ApiManagement';
+import ApiDocumentation from './components/ApiDocumentation';
 import { useRippleEffect } from './hooks/useRippleEffect';
 import { TABS, SLIDER_DEFAULTS, THUNDER_THRESHOLD } from './constants';
 
@@ -106,6 +108,8 @@ export default function App() {
             <Routes>
               <Route path="/" element={<AppInner />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/api" element={<ApiManagement />} />
+              <Route path="/api/docs" element={<ApiDocumentation />} />
             </Routes>
           </BrowserRouter>
         </WalletProvider>

@@ -72,6 +72,15 @@ const Navigation = () => {
             New Here?
           </span>
           
+          {currentAccount && (
+            <span 
+              onClick={() => navigate('/api')}
+              className="cursor-pointer hover:text-[#4DA2FF] hidden sm:block"
+            >
+              Get API
+            </span>
+          )}
+          
           <div ref={connectRef} className="relative hidden sm:block">
             <button 
               onClick={handleConnectClick}
